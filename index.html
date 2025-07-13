@@ -1,207 +1,271 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Math Challenge</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            background-color: #0a0a0a;
-            color: #00ffcc;
-            margin-top: 50px;
-        }
-        h1 {
-            font-size: 2.5em;
-            text-shadow: 0 0 10px #00ffcc;
-        }
-        .container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 20px;
-        }
-        .problem {
-            font-size: 2em;
-            font-weight: bold;
-            text-shadow: 0 0 5px #00ffcc;
-        }
-        .options {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-        .option {
-            font-size: 1.5em;
-            padding: 10px 20px;
-            background: #00ffcc;
-            color: black;
-            border: none;
-            cursor: pointer;
-            border-radius: 5px;
-            font-weight: bold;
-            width: 200px;
-        }
-        .option:hover {
-            background: #009988;
-        }
-        .correct {
-            background: #4CAF50 !important;
-        }
-        .incorrect {
-            background: #FF4444 !important;
-        }
-        .timer-container {
-            position: relative;
-            width: 100px;
-            height: 100px;
-            margin: 20px auto;
-        }
-        .timer-circle {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            border: 10px solid #ff4444;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5em;
-            font-weight: bold;
-            color: #ff4444;
-            box-shadow: 0 0 10px #ff4444;
-        }
-        footer {
-            margin-top: 50px;
-            font-size: 1em;
-            color: #00ffcc;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Bank Exam Math Challenge</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background-color: #0a0a0a;
+      color: #00ffcc;
+      margin-top: 50px;
+    }
+    h1 {
+      font-size: 2.5em;
+      text-shadow: 0 0 10px #00ffcc;
+    }
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+    }
+    .problem {
+      font-size: 2em;
+      font-weight: bold;
+      text-shadow: 0 0 5px #00ffcc;
+    }
+    .options {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .option {
+      font-size: 1.5em;
+      padding: 10px 20px;
+      background: #00ffcc;
+      color: black;
+      border: none;
+      cursor: pointer;
+      border-radius: 5px;
+      font-weight: bold;
+      width: 220px;
+    }
+    .option:hover {
+      background: #009988;
+    }
+    .correct {
+      background: #4CAF50 !important;
+    }
+    .incorrect {
+      background: #FF4444 !important;
+    }
+    .timer-container {
+      width: 100px;
+      height: 100px;
+      margin: 20px auto;
+    }
+    .timer-circle {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      border: 10px solid #ff4444;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5em;
+      font-weight: bold;
+      color: #ff4444;
+      box-shadow: 0 0 10px #ff4444;
+      transition: all 1s linear;
+    }
+    footer {
+      margin-top: 50px;
+      font-size: 1em;
+      color: #00ffcc;
+    }
+    input[type="number"] {
+      font-size: 1.5em;
+      padding: 10px;
+      border-radius: 5px;
+      width: 150px;
+    }
+  </style>
 </head>
 <body>
-    <h1>Math Challenge</h1>
-    <div class="container" id="selection-screen">
-        <h2>Select Question Type</h2>
-        <button class="option" onclick="startGame(['+'])">Addition</button>
-        <button class="option" onclick="startGame(['-'])">Subtraction</button>
-        <button class="option" onclick="startGame(['*'])">Multiplication 2×2</button>
-        <button class="option" onclick="startGame(['*3x2'])">Multiplication 3×2</button>
-        <button class="option" onclick="startGame(['square'])">Squares</button>
-        <button class="option" onclick="startGame(['+', '-', '*', '*3x2', 'square'])">All Mixed</button>
+  <h1>Math Challenge</h1>
+
+  <!-- Mode Selection Screen -->
+  <div class="container" id="mode-screen">
+    <h2>Select Answer Mode</h2>
+    <button class="option" onclick="setAnswerMode('mcq')">MCQ Mode</button>
+    <button class="option" onclick="setAnswerMode('typing')">Typing Mode</button>
+  </div>
+
+  <!-- Question Type Selection -->
+  <div class="container" id="type-selection-screen" style="display: none;">
+    <h2>Select Question Type</h2>
+    <button class="option" onclick="startGame(['+'])">Addition</button>
+    <button class="option" onclick="startGame(['-'])">Subtraction</button>
+    <button class="option" onclick="startGame(['*'])">Multiplication 2×2</button>
+    <button class="option" onclick="startGame(['*3x2'])">Multiplication 3×2</button>
+    <button class="option" onclick="startGame(['square'])">Squares</button>
+    <button class="option" onclick="startGame(['+', '-', '*', '*3x2', 'square'])">All Mixed</button>
+  </div>
+
+  <!-- Game Screen -->
+  <div class="container" id="game-screen" style="display: none;">
+    <div class="problem" id="problem"></div>
+    <div class="options" id="options"></div>
+    <div class="timer-container">
+      <div class="timer-circle" id="timer-circle">15</div>
     </div>
-    
-    <div class="container" id="game-screen" style="display: none;">
-        <div class="problem" id="problem"></div>
-        <div class="options" id="options"></div>
-        <div class="timer-container">
-            <div class="timer-circle" id="timer-circle">30</div>
+    <div class="score" id="score">Score: 0</div>
+  </div>
+
+  <footer>Prepared by Yash Kalra</footer>
+
+  <script>
+    let timer, timeLeft = 15, score = 0, questionCount = 0;
+    const totalQuestions = 25;
+    let currentAnswer, selectedTypes, answerMode = 'mcq';
+    let totalTime = 0;
+
+    function setAnswerMode(mode) {
+      answerMode = mode;
+      document.getElementById('mode-screen').style.display = 'none';
+      document.getElementById('type-selection-screen').style.display = 'flex';
+    }
+
+    function startGame(types) {
+      selectedTypes = types;
+      document.getElementById('type-selection-screen').style.display = 'none';
+      document.getElementById('game-screen').style.display = 'flex';
+      score = 0;
+      questionCount = 0;
+      totalTime = 0;
+      generateProblem();
+    }
+
+    function generateProblem() {
+      if (questionCount >= totalQuestions) {
+        showResultPage();
+        return;
+      }
+
+      questionCount++;
+      let type = selectedTypes[Math.floor(Math.random() * selectedTypes.length)];
+      let a, b;
+      if (type === '+') {
+        a = rand(10, 99); b = rand(10, 99); currentAnswer = a + b;
+      } else if (type === '-') {
+        a = rand(10, 99); b = rand(10, a); currentAnswer = a - b;
+      } else if (type === '*') {
+        a = rand(10, 99); b = rand(10, 99); currentAnswer = a * b;
+      } else if (type === '*3x2') {
+        a = rand(100, 999); b = rand(10, 99); currentAnswer = a * b;
+      } else if (type === 'square') {
+        a = rand(1, 200); currentAnswer = a * a;
+      }
+
+      document.getElementById('problem').textContent =
+        (type === 'square') ? `${a}²` : `${a} ${type} ${b}`;
+      generateOptions();
+      startTimer();
+    }
+
+    function generateOptions() {
+      const container = document.getElementById('options');
+      container.innerHTML = '';
+
+      if (answerMode === 'mcq') {
+        const correctIndex = rand(0, 3);
+        const used = new Set([currentAnswer]);
+
+        for (let i = 0; i < 4; i++) {
+          let val = currentAnswer;
+          if (i !== correctIndex) {
+            do {
+              val = currentAnswer + rand(-20, 20);
+            } while (used.has(val));
+          }
+          used.add(val);
+          const btn = document.createElement('button');
+          btn.className = 'option';
+          btn.textContent = val;
+          btn.onclick = () => checkAnswer(btn, val);
+          container.appendChild(btn);
+        }
+      } else {
+        const input = document.createElement('input');
+        input.type = 'number';
+        input.placeholder = 'Type your answer';
+        const submit = document.createElement('button');
+        submit.textContent = 'Submit';
+        submit.className = 'option';
+        submit.onclick = () => checkAnswer(input, parseInt(input.value));
+        container.appendChild(input);
+        container.appendChild(submit);
+      }
+    }
+
+    function checkAnswer(source, val) {
+      clearInterval(timer);
+      const timeTaken = 15 - timeLeft;
+      totalTime += timeTaken;
+
+      if (val === currentAnswer) {
+        score++;
+        if (source.tagName === 'BUTTON') source.classList.add('correct');
+        else source.style.borderColor = '#4CAF50';
+      } else {
+        if (source.tagName === 'BUTTON') source.classList.add('incorrect');
+        else source.style.borderColor = '#FF4444';
+        highlightCorrectAnswer();
+      }
+
+      document.getElementById('score').textContent = `Score: ${score}`;
+      setTimeout(generateProblem, 1000);
+    }
+
+    function highlightCorrectAnswer() {
+      document.querySelectorAll('.option').forEach(btn => {
+        if (parseInt(btn.textContent) === currentAnswer) {
+          btn.classList.add('correct');
+        }
+      });
+    }
+
+    function startTimer() {
+      timeLeft = 15;
+      document.getElementById('timer-circle').textContent = timeLeft;
+      document.getElementById('timer-circle').style.transform = 'scale(1)';
+
+      timer = setInterval(() => {
+        timeLeft--;
+        document.getElementById('timer-circle').textContent = timeLeft;
+        document.getElementById('timer-circle').style.transform = `scale(${timeLeft / 15})`;
+
+        if (timeLeft <= 0) {
+          clearInterval(timer);
+          checkAnswer(document.createElement('div'), NaN); // Timeout = wrong answer
+        }
+      }, 1000);
+    }
+
+    function showResultPage() {
+      document.getElementById('game-screen').style.display = 'none';
+      const accuracy = ((score / totalQuestions) * 100).toFixed(2);
+      const avgTime = (totalTime / totalQuestions).toFixed(2);
+
+      document.body.innerHTML = `
+        <div class="container">
+          <h2>Test Complete!</h2>
+          <p><strong>Score:</strong> ${score} / ${totalQuestions}</p>
+          <p><strong>Accuracy:</strong> ${accuracy}%</p>
+          <p><strong>Average Time per Question:</strong> ${avgTime} sec</p>
+          <button class="option" onclick="location.reload()">Try Again</button>
         </div>
-        <div class="score" id="score">Score: 0</div>
-    </div>
-    
-    <footer>Prepared by Yash Kalra</footer>
-    
-    <script>
-        let timer, timeLeft, score = 0, questionCount = 0, totalQuestions = 25, currentAnswer, selectedTypes;
+        <footer>Prepared by Yash Kalra</footer>
+      `;
+    }
 
-        function startGame(types) {
-            selectedTypes = types;
-            document.getElementById('selection-screen').style.display = 'none';
-            document.getElementById('game-screen').style.display = 'block';
-            score = 0;
-            questionCount = 0;
-            generateProblem();
-        }
-
-        function generateProblem() {
-            if (questionCount >= totalQuestions) {
-                showResultPage();
-                return;
-            }
-            questionCount++;
-            let type = selectedTypes[Math.floor(Math.random() * selectedTypes.length)];
-            let a, b;
-            if (type === '+') {
-                a = rand(10, 99);
-                b = rand(10, 99);
-                currentAnswer = a + b;
-            } else if (type === '-') {
-                a = rand(10, 99);
-                b = rand(10, a);
-                currentAnswer = a - b;
-            } else if (type === '*') {
-                a = rand(10, 99);
-                b = rand(10, 99);
-                currentAnswer = a * b;
-            } else if (type === '*3x2') {
-                a = rand(100, 999);
-                b = rand(10, 99);
-                currentAnswer = a * b;
-            } else if (type === 'square') {
-                a = rand(1, 200);
-                currentAnswer = a * a;
-            }
-            document.getElementById('problem').textContent = `${a} ${type === 'square' ? '^2' : type} ${b || ''}`;
-            generateOptions();
-            startTimer();
-        }
-
-        function generateOptions() {
-            let optionsContainer = document.getElementById('options');
-            optionsContainer.innerHTML = '';
-            let correctIndex = rand(0, 3);
-            for (let i = 0; i < 4; i++) {
-                let optionValue = (i === correctIndex) ? currentAnswer : currentAnswer + rand(-10, 10);
-                let button = document.createElement('button');
-                button.className = 'option';
-                button.textContent = optionValue;
-                button.onclick = () => checkAnswer(button, optionValue);
-                optionsContainer.appendChild(button);
-            }
-        }
-
-        function checkAnswer(button, option) {
-            clearInterval(timer);
-            if (option === currentAnswer) {
-                score++;
-                button.classList.add('correct');
-            } else {
-                button.classList.add('incorrect');
-                highlightCorrectAnswer();
-            }
-            document.getElementById('score').textContent = `Score: ${score}`;
-            setTimeout(generateProblem, 1000);
-        }
-
-        function highlightCorrectAnswer() {
-            document.querySelectorAll('.option').forEach(btn => {
-                if (parseInt(btn.textContent) === currentAnswer) {
-                    btn.classList.add('correct');
-                }
-            });
-        }
-
-        function startTimer() {
-            timeLeft = 30;
-            document.getElementById('timer-circle').textContent = timeLeft;
-            timer = setInterval(() => {
-                timeLeft--;
-                document.getElementById('timer-circle').textContent = timeLeft;
-                if (timeLeft <= 0) {
-                    clearInterval(timer);
-                    generateProblem();
-                }
-            }, 1000);
-        }
-
-        function showResultPage() {
-            alert(`Test Over! Score: ${score}/${totalQuestions}`);
-            location.reload();
-        }
-
-        function rand(min, max) {
-            return Math.floor(Math.random() * (max - min + 1)) + min;
-        }
-    </script>
+    function rand(min, max) {
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+  </script>
 </body>
 </html>
+
