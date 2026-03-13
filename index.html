@@ -6,7 +6,6 @@
 <title>Bank Exam Math Challenge</title>
 
 <style>
-
 body{
 font-family:Arial;
 background:#0a0a0a;
@@ -15,9 +14,7 @@ text-align:center;
 margin-top:40px;
 }
 
-h1{
-text-shadow:0 0 10px #00ffcc;
-}
+h1{text-shadow:0 0 10px #00ffcc;}
 
 .container{
 display:flex;
@@ -43,17 +40,10 @@ width:220px;
 font-weight:bold;
 }
 
-.option:hover{
-background:#009988;
-}
+.option:hover{background:#009988;}
 
-.correct{
-background:#4CAF50 !important;
-}
-
-.incorrect{
-background:#ff4444 !important;
-}
+.correct{background:#4CAF50 !important;}
+.incorrect{background:#ff4444 !important;}
 
 .options{
 display:flex;
@@ -83,10 +73,7 @@ width:160px;
 text-align:center;
 }
 
-footer{
-margin-top:40px;
-}
-
+footer{margin-top:40px;}
 </style>
 </head>
 
@@ -95,17 +82,13 @@ margin-top:40px;
 <h1>Math Challenge</h1>
 
 <div class="container" id="mode-screen">
-
 <h2>Select Answer Mode</h2>
-
 <button class="option" onclick="setAnswerMode('mcq')">MCQ Mode</button>
 <button class="option" onclick="setAnswerMode('typing')">Typing Mode</button>
-
 </div>
 
 
 <div class="container" id="type-selection-screen" style="display:none">
-
 <h2>Select Question Type</h2>
 
 <button class="option" onclick="startGame(['+'])">Addition</button>
@@ -113,7 +96,12 @@ margin-top:40px;
 <button class="option" onclick="startGame(['*'])">Multiplication 2×2</button>
 <button class="option" onclick="startGame(['*3x2'])">Multiplication 3×2</button>
 <button class="option" onclick="startGame(['square'])">Squares</button>
-<button class="option" onclick="startGame(['+','-','*','*3x2','square'])">All Mixed</button>
+<button class="option" onclick="startGame(['percent'])">Percentage</button>
+<button class="option" onclick="startGame(['division'])">Division</button>
+
+<button class="option" onclick="startGame(['+','-','*','*3x2','square','percent','division'])">
+All Mixed
+</button>
 
 </div>
 
@@ -141,7 +129,6 @@ let timeLeft = 30
 let score = 0
 let streak = 0
 let questionCount = 0
-
 let totalQuestions = 25
 
 let currentAnswer
@@ -182,11 +169,8 @@ generateProblem()
 function generateProblem(){
 
 if(questionCount >= totalQuestions){
-
 showResult()
-
 return
-
 }
 
 questionCount++
@@ -197,48 +181,54 @@ let a,b
 
 
 if(type==="+"){
-
 a = rand(10,99)
 b = rand(10,99)
 currentAnswer = a+b
-
+document.getElementById("problem").textContent = a+" + "+b
 }
 
 else if(type==="-" ){
-
 a = rand(10,99)
 b = rand(10,a)
 currentAnswer = a-b
-
+document.getElementById("problem").textContent = a+" - "+b
 }
 
 else if(type==="*"){
-
 a = rand(11,30)
 b = rand(11,30)
 currentAnswer = a*b
-
+document.getElementById("problem").textContent = a+" × "+b
 }
 
 else if(type==="*3x2"){
-
 a = rand(101,299)
 b = rand(11,29)
 currentAnswer = a*b
-
+document.getElementById("problem").textContent = a+" × "+b
 }
 
 else if(type==="square"){
-
-a = rand(1,130)
+a = rand(1,200)
 currentAnswer = a*a
-
+document.getElementById("problem").textContent = a+"²"
 }
 
-document.getElementById("problem").textContent = (type==="square") ? a+"²" : a+" "+type+" "+b
+else if(type==="percent"){
+a = rand(10,80)
+b = rand(50,500)
+currentAnswer = Math.round((a/100)*b)
+document.getElementById("problem").textContent = a+"% of "+b
+}
+
+else if(type==="division"){
+b = rand(2,20)
+currentAnswer = rand(5,40)
+a = currentAnswer*b
+document.getElementById("problem").textContent = a+" ÷ "+b
+}
 
 generateOptions()
-
 startTimer()
 
 }
@@ -248,13 +238,11 @@ startTimer()
 function generateOptions(){
 
 let container = document.getElementById("options")
-
 container.innerHTML=""
 
 if(answerMode==="mcq"){
 
 let correctIndex = rand(0,3)
-
 let used = new Set()
 
 for(let i=0;i<4;i++){
@@ -262,29 +250,18 @@ for(let i=0;i<4;i++){
 let val
 
 if(i===correctIndex){
-
 val = currentAnswer
-
-}
-
-else{
-
+}else{
 do{
-
 val = currentAnswer + rand(-50,50)
-
 }while(used.has(val) || val===currentAnswer)
-
 }
 
 used.add(val)
 
 let btn = document.createElement("button")
-
 btn.className="option"
-
 btn.textContent = val
-
 btn.onclick = ()=>checkAnswer(btn,val)
 
 container.appendChild(btn)
@@ -296,32 +273,25 @@ container.appendChild(btn)
 else{
 
 let input = document.createElement("input")
-
 input.type="number"
-
 input.placeholder="Type answer"
 
 let submit = document.createElement("button")
-
 submit.className="option"
-
 submit.textContent="Submit"
 
 submit.onclick = ()=>checkAnswer(input,parseInt(input.value))
 
 input.addEventListener("keypress",function(e){
-
 if(e.key==="Enter"){
-
 checkAnswer(input,parseInt(input.value))
-
 }
-
 })
 
 container.appendChild(input)
-
 container.appendChild(submit)
+
+setTimeout(()=>input.focus(),50)
 
 }
 
@@ -334,7 +304,6 @@ function checkAnswer(source,val){
 clearInterval(timer)
 
 let timeTaken = 30 - timeLeft
-
 totalTime += timeTaken
 
 if(val === currentAnswer){
@@ -344,9 +313,7 @@ streak++
 
 if(source.tagName==="BUTTON") source.classList.add("correct")
 
-}
-
-else{
+}else{
 
 streak = 0
 
@@ -368,13 +335,9 @@ setTimeout(generateProblem,1000)
 function highlightCorrect(){
 
 document.querySelectorAll(".option").forEach(btn=>{
-
 if(parseInt(btn.textContent)===currentAnswer){
-
 btn.classList.add("correct")
-
 }
-
 })
 
 }
@@ -389,9 +352,8 @@ let timerCircle = document.getElementById("timer-circle")
 
 timerCircle.textContent = timeLeft
 
-timerCircle.style.borderColor = "#ff4444"
-
-timerCircle.style.color = "#ff4444"
+timerCircle.style.borderColor="#ff4444"
+timerCircle.style.color="#ff4444"
 
 timer = setInterval(()=>{
 
@@ -399,21 +361,16 @@ timeLeft--
 
 timerCircle.textContent = timeLeft
 
-timerCircle.style.transform = `scale(${timeLeft/30})`
+timerCircle.style.transform=`scale(${timeLeft/30})`
 
-if(timeLeft <=5){
-
+if(timeLeft<=5){
 timerCircle.style.borderColor="#ff0000"
 timerCircle.style.color="#ff0000"
-
 }
 
 if(timeLeft<=0){
-
 clearInterval(timer)
-
 checkAnswer(document.createElement("div"),NaN)
-
 }
 
 },1000)
@@ -426,9 +383,8 @@ function showResult(){
 
 document.getElementById("game-screen").style.display="none"
 
-let accuracy = ((score/totalQuestions)*100).toFixed(2)
-
-let avgTime = (totalTime/totalQuestions).toFixed(2)
+let accuracy=((score/totalQuestions)*100).toFixed(2)
+let avgTime=(totalTime/totalQuestions).toFixed(2)
 
 document.body.innerHTML=`
 
@@ -455,9 +411,7 @@ document.body.innerHTML=`
 
 
 function rand(min,max){
-
 return Math.floor(Math.random()*(max-min+1))+min
-
 }
 
 </script>
