@@ -87,8 +87,8 @@ footer{margin-top:40px;}
 <button class="option" onclick="setAnswerMode('typing')">Typing Mode</button>
 </div>
 
-
 <div class="container" id="type-selection-screen" style="display:none">
+
 <h2>Select Question Type</h2>
 
 <button class="option" onclick="startGame(['+'])">Addition</button>
@@ -99,12 +99,12 @@ footer{margin-top:40px;}
 <button class="option" onclick="startGame(['percent'])">Percentage</button>
 <button class="option" onclick="startGame(['division'])">Division</button>
 
-<button class="option" onclick="startGame(['+','-','*','*3x2','square','percent','division'])">
+<button class="option"
+onclick="startGame(['+','-','*','*3x2','square','percent','division'])">
 All Mixed
 </button>
 
 </div>
-
 
 <div class="container" id="game-screen" style="display:none">
 
@@ -124,23 +124,24 @@ All Mixed
 <script>
 
 let timer
-let timeLeft = 30
+let timeLeft=30
 
-let score = 0
-let streak = 0
-let questionCount = 0
-let totalQuestions = 25
+let score=0
+let streak=0
+let questionCount=0
+
+let totalQuestions=25
 
 let currentAnswer
 let selectedTypes
-let answerMode = "mcq"
+let answerMode="mcq"
 
-let totalTime = 0
+let totalTime=0
 
 
 function setAnswerMode(mode){
 
-answerMode = mode
+answerMode=mode
 
 document.getElementById("mode-screen").style.display="none"
 document.getElementById("type-selection-screen").style.display="flex"
@@ -150,85 +151,172 @@ document.getElementById("type-selection-screen").style.display="flex"
 
 function startGame(types){
 
-selectedTypes = types
+selectedTypes=types
 
 document.getElementById("type-selection-screen").style.display="none"
 document.getElementById("game-screen").style.display="flex"
 
-score = 0
-streak = 0
-questionCount = 0
-totalTime = 0
+score=0
+streak=0
+questionCount=0
+totalTime=0
 
 generateProblem()
 
 }
 
 
-
 function generateProblem(){
 
-if(questionCount >= totalQuestions){
+if(questionCount>=totalQuestions){
 showResult()
 return
 }
 
 questionCount++
 
-let type = selectedTypes[Math.floor(Math.random()*selectedTypes.length)]
+let type=selectedTypes[Math.floor(Math.random()*selectedTypes.length)]
 
 let a,b
 
 
 if(type==="+"){
-a = rand(10,99)
-b = rand(10,99)
-currentAnswer = a+b
-document.getElementById("problem").textContent = a+" + "+b
+
+a=rand(10,99)
+b=rand(10,99)
+
+currentAnswer=a+b
+
+document.getElementById("problem").textContent=a+" + "+b
+
 }
+
 
 else if(type==="-" ){
-a = rand(10,99)
-b = rand(10,a)
-currentAnswer = a-b
-document.getElementById("problem").textContent = a+" - "+b
+
+a=rand(10,99)
+b=rand(10,a)
+
+currentAnswer=a-b
+
+document.getElementById("problem").textContent=a+" - "+b
+
 }
+
 
 else if(type==="*"){
-a = rand(11,30)
-b = rand(11,30)
-currentAnswer = a*b
-document.getElementById("problem").textContent = a+" × "+b
+
+a=rand(11,30)
+b=rand(11,30)
+
+currentAnswer=a*b
+
+document.getElementById("problem").textContent=a+" × "+b
+
 }
+
 
 else if(type==="*3x2"){
-a = rand(101,299)
-b = rand(11,29)
-currentAnswer = a*b
-document.getElementById("problem").textContent = a+" × "+b
+
+a=rand(101,299)
+b=rand(11,29)
+
+currentAnswer=a*b
+
+document.getElementById("problem").textContent=a+" × "+b
+
 }
+
 
 else if(type==="square"){
-a = rand(1,200)
-currentAnswer = a*a
-document.getElementById("problem").textContent = a+"²"
+
+a=rand(1,200)
+
+currentAnswer=a*a
+
+document.getElementById("problem").textContent=a+"²"
+
 }
+
 
 else if(type==="percent"){
-a = rand(10,80)
-b = rand(50,500)
-currentAnswer = Math.round((a/100)*b)
-document.getElementById("problem").textContent = a+"% of "+b
+
+let fractions=[
+
+{p:"50",n:1,d:2},
+
+{p:"33.33",n:1,d:3},
+{p:"66.67",n:2,d:3},
+
+{p:"25",n:1,d:4},
+{p:"75",n:3,d:4},
+
+{p:"20",n:1,d:5},
+{p:"40",n:2,d:5},
+{p:"60",n:3,d:5},
+{p:"80",n:4,d:5},
+
+{p:"16.67",n:1,d:6},
+{p:"83.33",n:5,d:6},
+
+{p:"14.28",n:1,d:7},
+{p:"28.57",n:2,d:7},
+{p:"42.85",n:3,d:7},
+{p:"57.14",n:4,d:7},
+{p:"71.42",n:5,d:7},
+{p:"85.71",n:6,d:7},
+
+{p:"12.5",n:1,d:8},
+{p:"37.5",n:3,d:8},
+{p:"62.5",n:5,d:8},
+{p:"87.5",n:7,d:8},
+
+{p:"11.11",n:1,d:9},
+{p:"22.22",n:2,d:9},
+{p:"33.33",n:3,d:9},
+{p:"44.44",n:4,d:9},
+{p:"55.55",n:5,d:9},
+{p:"66.66",n:6,d:9},
+{p:"77.77",n:7,d:9},
+{p:"88.88",n:8,d:9},
+
+{p:"9.09",n:1,d:11},
+{p:"18.18",n:2,d:11},
+{p:"27.27",n:3,d:11},
+{p:"36.36",n:4,d:11},
+{p:"45.45",n:5,d:11},
+{p:"54.54",n:6,d:11},
+{p:"63.63",n:7,d:11},
+{p:"72.72",n:8,d:11},
+{p:"81.81",n:9,d:11}
+
+]
+
+let f=fractions[rand(0,fractions.length-1)]
+
+b=f.d*rand(10,80)
+
+currentAnswer=(f.n*b)/f.d
+
+document.getElementById("problem").textContent=f.p+"% of "+b
+
 }
 
+
 else if(type==="division"){
-b = rand(2,20)
-currentAnswer = rand(5,40)
-a = currentAnswer*b
-document.getElementById("problem").textContent = a+" ÷ "+b
+
+b=rand(2,20)
+
+currentAnswer=rand(5,40)
+
+a=currentAnswer*b
+
+document.getElementById("problem").textContent=a+" ÷ "+b
+
 }
 
 generateOptions()
+
 startTimer()
 
 }
@@ -237,32 +325,43 @@ startTimer()
 
 function generateOptions(){
 
-let container = document.getElementById("options")
+let container=document.getElementById("options")
+
 container.innerHTML=""
 
 if(answerMode==="mcq"){
 
-let correctIndex = rand(0,3)
-let used = new Set()
+let correctIndex=rand(0,3)
+
+let used=new Set()
 
 for(let i=0;i<4;i++){
 
 let val
 
 if(i===correctIndex){
-val = currentAnswer
-}else{
+
+val=currentAnswer
+
+}
+
+else{
+
 do{
-val = currentAnswer + rand(-50,50)
-}while(used.has(val) || val===currentAnswer)
+val=currentAnswer+rand(-50,50)
+}while(used.has(val)||val===currentAnswer)
+
 }
 
 used.add(val)
 
-let btn = document.createElement("button")
+let btn=document.createElement("button")
+
 btn.className="option"
-btn.textContent = val
-btn.onclick = ()=>checkAnswer(btn,val)
+
+btn.textContent=val
+
+btn.onclick=()=>checkAnswer(btn,val)
 
 container.appendChild(btn)
 
@@ -272,15 +371,19 @@ container.appendChild(btn)
 
 else{
 
-let input = document.createElement("input")
+let input=document.createElement("input")
+
 input.type="number"
+
 input.placeholder="Type answer"
 
-let submit = document.createElement("button")
+let submit=document.createElement("button")
+
 submit.className="option"
+
 submit.textContent="Submit"
 
-submit.onclick = ()=>checkAnswer(input,parseInt(input.value))
+submit.onclick=()=>checkAnswer(input,parseInt(input.value))
 
 input.addEventListener("keypress",function(e){
 if(e.key==="Enter"){
@@ -303,19 +406,22 @@ function checkAnswer(source,val){
 
 clearInterval(timer)
 
-let timeTaken = 30 - timeLeft
-totalTime += timeTaken
+let timeTaken=30-timeLeft
 
-if(val === currentAnswer){
+totalTime+=timeTaken
+
+if(val===currentAnswer){
 
 score++
 streak++
 
 if(source.tagName==="BUTTON") source.classList.add("correct")
 
-}else{
+}
 
-streak = 0
+else{
+
+streak=0
 
 if(source.tagName==="BUTTON") source.classList.add("incorrect")
 
@@ -346,31 +452,26 @@ btn.classList.add("correct")
 
 function startTimer(){
 
-timeLeft = 30
+timeLeft=30
 
-let timerCircle = document.getElementById("timer-circle")
+let timerCircle=document.getElementById("timer-circle")
 
-timerCircle.textContent = timeLeft
+timerCircle.textContent=timeLeft
 
-timerCircle.style.borderColor="#ff4444"
-timerCircle.style.color="#ff4444"
-
-timer = setInterval(()=>{
+timer=setInterval(()=>{
 
 timeLeft--
 
-timerCircle.textContent = timeLeft
+timerCircle.textContent=timeLeft
 
 timerCircle.style.transform=`scale(${timeLeft/30})`
 
-if(timeLeft<=5){
-timerCircle.style.borderColor="#ff0000"
-timerCircle.style.color="#ff0000"
-}
-
 if(timeLeft<=0){
+
 clearInterval(timer)
+
 checkAnswer(document.createElement("div"),NaN)
+
 }
 
 },1000)
@@ -384,6 +485,7 @@ function showResult(){
 document.getElementById("game-screen").style.display="none"
 
 let accuracy=((score/totalQuestions)*100).toFixed(2)
+
 let avgTime=(totalTime/totalQuestions).toFixed(2)
 
 document.body.innerHTML=`
@@ -411,7 +513,9 @@ document.body.innerHTML=`
 
 
 function rand(min,max){
+
 return Math.floor(Math.random()*(max-min+1))+min
+
 }
 
 </script>
