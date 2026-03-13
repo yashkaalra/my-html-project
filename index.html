@@ -110,7 +110,7 @@
     <div class="problem" id="problem"></div>
     <div class="options" id="options"></div>
     <div class="timer-container">
-      <div class="timer-circle" id="timer-circle">15</div>
+      <div class="timer-circle" id="timer-circle">30</div>
     </div>
     <div class="score" id="score">Score: 0</div>
   </div>
@@ -118,7 +118,7 @@
   <footer>Prepared by Yash Kalra</footer>
 
   <script>
-    let timer, timeLeft = 15, score = 0, questionCount = 0;
+    let timer, timeLeft = 30, score = 0, questionCount = 0;
     const totalQuestions = 25;
     let currentAnswer, selectedTypes, answerMode = 'mcq';
     let totalTime = 0;
@@ -236,7 +236,7 @@
       timer = setInterval(() => {
         timeLeft--;
         document.getElementById('timer-circle').textContent = timeLeft;
-        document.getElementById('timer-circle').style.transform = `scale(${timeLeft / 15})`;
+        document.getElementById('timer-circle').style.transform = `scale(${timeLeft / 30})`;
 
         if (timeLeft <= 0) {
           clearInterval(timer);
