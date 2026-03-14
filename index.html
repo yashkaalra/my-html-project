@@ -210,7 +210,7 @@ footer{position:fixed;bottom:12px;width:100%;text-align:center;font-family:'Shar
       <button class="btn type-btn" onclick="startGame(['*3x2'])">    <span class="icon">✖</span> <span class="label">Multiply 3×2</span>  <span class="desc">101–299 × 11–29</span></button>
       <button class="btn type-btn" onclick="startGame(['square'])">  <span class="icon">x²</span><span class="label">Squares</span>        <span class="desc">1–200</span></button>
       <button class="btn type-btn" onclick="startGame(['cube'])">    <span class="icon">x³</span><span class="label">Cubes</span>          <span class="desc">2–30</span></button>
-      <button class="btn type-btn" onclick="startGame(['sq-cu'])">   <span class="icon">²³</span><span class="label">Sq &amp; Cube Mix</span><span class="desc">Sq 2–50 · Cu 2–30</span></button>
+      <button class="btn type-btn" onclick="startGame(['sq-cu'])">   <span class="icon">²³</span><span class="label">Sq &amp; Cube Mix</span><span class="desc">Sq 2–50 · Cu 2–25</span></button>
       <button class="btn type-btn" onclick="startGame(['percent'])"> <span class="icon">%</span> <span class="label">Percentage</span>     <span class="desc">Fraction equivalents</span></button>
       <button class="btn type-btn" onclick="startGame(['division'])" style="grid-column:1/-1"><span class="icon">÷</span><span class="label">Division</span><span class="desc">Clean divisibility</span></button>
     </div>
@@ -505,7 +505,7 @@ function generateProblem() {
   else if (type==='*3x2')     { a=rand(101,299); b=rand(11,29);  currentAnswer=a*b;   setQ(a+' × '+b); }
   else if (type==='square')   { a=rand(1,200);   currentAnswer=a*a;   setSup(a,2); }
   else if (type==='square-small'){ a=rand(2,50); currentAnswer=a*a;   setSup(a,2); }
-  else if (type==='cube')     { a=rand(2,30);    currentAnswer=a*a*a; setSup(a,3); }
+  else if (type==='cube')     { a=rand(2,25);    currentAnswer=a*a*a; setSup(a,3); }
   else if (type==='percent')  {
     const F=[
       {p:"50",n:1,d:2},{p:"33.33",n:1,d:3},{p:"66.67",n:2,d:3},
