@@ -3,522 +3,811 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Bank Exam Math Challenge</title>
-
+<title>BankPrep — Math Challenge</title>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Share+Tech+Mono&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-body{
-font-family:Arial;
-background:#0a0a0a;
-color:#00ffcc;
-text-align:center;
-margin-top:40px;
+:root {
+  --bg:#070b14; --surface:#0d1525; --surface2:#111e35; --border:#1e3050;
+  --accent:#f0b429; --accent2:#e05c00; --green:#2ecc87; --red:#e74c6e;
+  --blue:#3a8ef6; --text:#d4e4ff; --muted:#4e6a8a;
+  --glow:0 0 18px rgba(240,180,41,0.25);
 }
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Barlow',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(58,142,246,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(58,142,246,0.03) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;z-index:0;}
+body::after{content:'';position:fixed;top:-200px;right:-200px;width:600px;height:600px;background:radial-gradient(circle,rgba(240,180,41,0.08) 0%,transparent 70%);pointer-events:none;z-index:0;}
 
-h1{text-shadow:0 0 10px #00ffcc;}
+.screen{position:relative;z-index:1;min-height:100vh;display:none;flex-direction:column;align-items:center;justify-content:center;padding:20px 16px;animation:fadeIn .35s ease;}
+.screen.active{display:flex;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
 
-.container{
-display:flex;
-flex-direction:column;
-align-items:center;
-gap:20px;
+.brand{font-family:'Rajdhani',sans-serif;font-size:2.8rem;font-weight:700;letter-spacing:3px;color:#fff;text-align:center;line-height:1;}
+.brand span{color:var(--accent);}
+.brand-sub{font-family:'Share Tech Mono',monospace;font-size:.72rem;color:var(--muted);letter-spacing:5px;text-transform:uppercase;margin-top:4px;text-align:center;}
+
+.card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:24px 28px;width:100%;max-width:580px;}
+
+.btn{font-family:'Barlow',sans-serif;font-weight:600;font-size:1rem;padding:13px 18px;border:1.5px solid var(--border);border-radius:8px;cursor:pointer;background:var(--surface2);color:var(--text);transition:all .18s;letter-spacing:.5px;position:relative;overflow:hidden;text-align:center;display:block;width:100%;}
+.btn::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,0.03) 0%,transparent 60%);pointer-events:none;}
+.btn:hover{border-color:var(--accent);color:#fff;background:rgba(240,180,41,0.08);transform:translateY(-1px);box-shadow:var(--glow);}
+.btn:active{transform:translateY(0);}
+.btn.primary{background:var(--accent);color:#0a0500;border-color:var(--accent);font-weight:700;}
+.btn.primary:hover{background:#ffc947;box-shadow:0 0 24px rgba(240,180,41,0.4);}
+
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.col{display:flex;flex-direction:column;gap:10px;}
+
+.section-label{font-family:'Share Tech Mono',monospace;font-size:.68rem;letter-spacing:4px;color:var(--muted);text-transform:uppercase;margin-bottom:10px;}
+.divider{height:1px;background:var(--border);margin:18px 0;}
+
+.type-btn{display:flex;flex-direction:column;align-items:flex-start;gap:3px;padding:14px 16px;width:100%;}
+.type-btn .icon{font-size:1.3rem;}
+.type-btn .label{font-size:.93rem;font-weight:600;color:#fff;}
+.type-btn .desc{font-size:.7rem;color:var(--muted);}
+
+/* PRACTICE MODE PILLS */
+.mode-pills{display:flex;gap:6px;background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:5px;margin-bottom:16px;}
+.pill{flex:1;padding:9px 6px;border:none;background:transparent;color:var(--muted);font-family:'Barlow',sans-serif;font-size:.85rem;font-weight:600;border-radius:7px;cursor:pointer;transition:all .18s;text-align:center;}
+.pill.active{background:var(--surface2);color:#fff;border:1px solid var(--border);}
+.pill.speed.active{color:var(--red);border-color:rgba(231,76,110,0.4);}
+.pill.accuracy.active{color:var(--green);border-color:rgba(46,204,135,0.4);}
+.pill.normal.active{color:var(--accent);border-color:rgba(240,180,41,0.4);}
+
+/* COUNT PILLS */
+.count-pills{display:flex;gap:6px;}
+.count-pill{flex:1;padding:10px;border:1.5px solid var(--border);border-radius:8px;background:var(--surface2);color:var(--muted);font-family:'Rajdhani',sans-serif;font-size:1.1rem;font-weight:700;cursor:pointer;transition:all .18s;text-align:center;}
+.count-pill:hover{border-color:var(--accent);color:#fff;}
+.count-pill.active{border-color:var(--accent);color:var(--accent);background:rgba(240,180,41,0.08);}
+
+/* ANS STYLE BTNS */
+.ans-style-btn{padding:12px;border:1.5px solid var(--border);border-radius:8px;background:var(--surface2);color:var(--muted);font-family:'Barlow',sans-serif;font-weight:600;font-size:.95rem;cursor:pointer;transition:all .18s;text-align:center;width:100%;}
+.ans-style-btn.active{border-color:var(--accent);color:var(--accent);background:rgba(240,180,41,0.08);}
+.ans-style-btn:disabled{opacity:.35;cursor:not-allowed;}
+
+/* GAME SCREEN */
+#game-screen{gap:0;justify-content:flex-start;padding-top:14px;}
+
+.hud{width:100%;max-width:620px;display:flex;align-items:center;justify-content:space-between;padding:10px 18px;background:var(--surface);border:1px solid var(--border);border-radius:10px;margin-bottom:12px;gap:8px;}
+.hud-stat{display:flex;flex-direction:column;align-items:center;gap:1px;}
+.hud-stat .val{font-family:'Rajdhani',sans-serif;font-size:1.6rem;font-weight:700;color:#fff;line-height:1;}
+.hud-stat .lbl{font-family:'Share Tech Mono',monospace;font-size:.58rem;color:var(--muted);letter-spacing:2px;text-transform:uppercase;}
+.val.green{color:var(--green)!important;}
+.val.amber{color:var(--accent)!important;}
+.val.red{color:var(--red)!important;}
+
+.mode-badge{font-family:'Share Tech Mono',monospace;font-size:.58rem;padding:3px 8px;border-radius:50px;letter-spacing:2px;white-space:nowrap;}
+.mode-badge.speed{background:rgba(231,76,110,0.15);color:var(--red);border:1px solid rgba(231,76,110,0.3);}
+.mode-badge.accuracy{background:rgba(46,204,135,0.15);color:var(--green);border:1px solid rgba(46,204,135,0.3);}
+.mode-badge.normal{background:rgba(240,180,41,0.12);color:var(--accent);border:1px solid rgba(240,180,41,0.3);}
+
+.progress-wrap{width:100%;max-width:620px;height:4px;background:var(--border);border-radius:2px;margin-bottom:14px;overflow:hidden;}
+.progress-bar{height:100%;background:linear-gradient(90deg,var(--accent2),var(--accent));border-radius:2px;transition:width .4s ease;}
+
+.timer-wrap{position:relative;width:72px;height:72px;flex-shrink:0;}
+.timer-svg{width:72px;height:72px;transform:rotate(-90deg);}
+.timer-bg{fill:none;stroke:var(--border);stroke-width:5;}
+.timer-fg{fill:none;stroke:var(--accent);stroke-width:5;stroke-linecap:round;stroke-dasharray:201;stroke-dashoffset:0;transition:stroke-dashoffset 1s linear,stroke .3s;}
+.timer-num{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'Rajdhani',sans-serif;font-size:1.4rem;font-weight:700;color:#fff;}
+.timer-inf{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:1.7rem;color:var(--green);}
+
+@keyframes speedPulse{0%,100%{box-shadow:0 0 0 0 rgba(231,76,110,0.5)}50%{box-shadow:0 0 0 10px rgba(231,76,110,0)}}
+.speed-ring{animation:speedPulse 1.2s infinite;}
+
+.q-card{width:100%;max-width:620px;background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:24px 24px 20px;text-align:center;margin-bottom:12px;position:relative;}
+.q-meta{font-family:'Share Tech Mono',monospace;font-size:.63rem;color:var(--muted);letter-spacing:3px;margin-bottom:10px;text-transform:uppercase;}
+.q-problem{font-family:'Rajdhani',sans-serif;font-size:3rem;font-weight:700;color:#fff;letter-spacing:1px;line-height:1.1;}
+
+.bookmark-btn{position:absolute;top:12px;right:12px;background:transparent;border:1px solid var(--border);border-radius:6px;color:var(--muted);font-size:.95rem;padding:5px 8px;cursor:pointer;transition:all .18s;line-height:1;}
+.bookmark-btn:hover{border-color:var(--accent);color:var(--accent);}
+.bookmark-btn.flagged{border-color:var(--accent);color:var(--accent);background:rgba(240,180,41,0.12);}
+
+.options-grid{width:100%;max-width:620px;display:grid;gap:8px;}
+.opt-btn{font-family:'Rajdhani',sans-serif;font-size:1.3rem;font-weight:600;padding:13px 20px;background:var(--surface);border:1.5px solid var(--border);border-radius:10px;color:var(--text);cursor:pointer;transition:all .15s;text-align:center;letter-spacing:.5px;width:100%;}
+.opt-btn:hover:not(:disabled){border-color:var(--accent);background:rgba(240,180,41,0.07);color:#fff;}
+.opt-btn.correct{background:rgba(46,204,135,0.15)!important;border-color:var(--green)!important;color:var(--green)!important;}
+.opt-btn.incorrect{background:rgba(231,76,110,0.15)!important;border-color:var(--red)!important;color:var(--red)!important;}
+
+.typing-wrap{display:flex;flex-direction:column;align-items:stretch;gap:10px;width:100%;max-width:620px;}
+.typing-wrap input{font-family:'Share Tech Mono',monospace;font-size:1.8rem;padding:14px 20px;border-radius:10px;border:1.5px solid var(--border);background:var(--surface2);color:#fff;width:100%;text-align:center;outline:none;transition:border-color .2s;}
+.typing-wrap input:focus{border-color:var(--accent);box-shadow:var(--glow);}
+
+.feedback{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);font-family:'Rajdhani',sans-serif;font-size:4rem;font-weight:700;pointer-events:none;opacity:0;z-index:100;}
+.feedback.show{animation:flashFade .7s ease forwards;}
+@keyframes flashFade{0%{opacity:1;transform:translate(-50%,-50%) scale(1)}50%{opacity:1;transform:translate(-50%,-60%) scale(1.15)}100%{opacity:0;transform:translate(-50%,-70%) scale(.9)}}
+
+/* RESULT */
+#result-screen{justify-content:flex-start;padding-top:24px;padding-bottom:70px;overflow-y:auto;}
+.result-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:32px 28px;max-width:560px;width:100%;text-align:center;}
+.result-score{font-family:'Rajdhani',sans-serif;font-size:5rem;font-weight:700;line-height:1;color:var(--accent);}
+.result-label{font-family:'Share Tech Mono',monospace;font-size:.7rem;letter-spacing:4px;color:var(--muted);margin-bottom:16px;text-transform:uppercase;}
+.stats-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin:16px 0;}
+.stat-box{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:14px 8px;}
+.stat-box .val{font-family:'Rajdhani',sans-serif;font-size:1.8rem;font-weight:700;color:#fff;}
+.stat-box .lbl{font-family:'Share Tech Mono',monospace;font-size:.58rem;letter-spacing:2px;color:var(--muted);margin-top:2px;text-transform:uppercase;}
+.grade-badge{display:inline-block;padding:5px 16px;border-radius:50px;font-family:'Rajdhani',sans-serif;font-weight:700;font-size:.95rem;letter-spacing:2px;margin-bottom:14px;}
+
+/* WRONG LOG */
+.log-section{margin-top:18px;text-align:left;}
+.log-header{font-family:'Share Tech Mono',monospace;font-size:.65rem;letter-spacing:3px;color:var(--muted);text-transform:uppercase;display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+.toggle-btn{background:transparent;border:none;color:var(--blue);font-family:'Share Tech Mono',monospace;font-size:.63rem;letter-spacing:2px;cursor:pointer;text-transform:uppercase;padding:2px 0;}
+.toggle-btn:hover{color:#fff;}
+.log-scroll{max-height:240px;overflow-y:auto;padding-right:4px;}
+.log-scroll::-webkit-scrollbar{width:4px;}
+.log-scroll::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px;}
+.wrong-item{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:12px 14px;margin-bottom:8px;display:flex;align-items:center;justify-content:space-between;gap:12px;}
+.wrong-item.bm{border-color:rgba(240,180,41,0.35);background:rgba(240,180,41,0.04);}
+.wi-left .tag{font-family:'Share Tech Mono',monospace;font-size:.6rem;color:var(--muted);letter-spacing:1px;}
+.wi-left .q{font-family:'Rajdhani',sans-serif;font-size:1.1rem;color:#fff;font-weight:600;}
+.wi-ans{font-family:'Share Tech Mono',monospace;font-size:.85rem;color:var(--green);flex-shrink:0;}
+
+/* WEAK BARS */
+.weak-bars{margin-top:8px;}
+.weak-row{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
+.weak-label{font-family:'Share Tech Mono',monospace;font-size:.63rem;color:var(--muted);width:110px;flex-shrink:0;letter-spacing:1px;}
+.weak-track{flex:1;height:6px;background:var(--border);border-radius:3px;overflow:hidden;}
+.weak-fill{height:100%;border-radius:3px;transition:width .5s ease;}
+.weak-pct{font-family:'Rajdhani',sans-serif;font-size:.9rem;font-weight:700;width:36px;text-align:right;flex-shrink:0;}
+
+/* DRILL SCREEN */
+#drill-screen{justify-content:center;}
+.drill-counter{font-family:'Share Tech Mono',monospace;font-size:.68rem;color:var(--muted);letter-spacing:3px;margin-bottom:14px;text-align:center;text-transform:uppercase;}
+
+footer{position:fixed;bottom:12px;width:100%;text-align:center;font-family:'Share Tech Mono',monospace;font-size:.6rem;letter-spacing:3px;color:var(--muted);z-index:1;}
+
+@media(max-width:500px){
+  .brand{font-size:2.2rem;}
+  .q-problem{font-size:2.4rem;}
+  .result-score{font-size:3.6rem;}
+  .hud{padding:8px 10px;}
+  .hud-stat .val{font-size:1.35rem;}
+  .card{padding:20px 18px;}
 }
-
-.problem{
-font-size:2em;
-font-weight:bold;
-}
-
-.option{
-font-size:1.3em;
-padding:10px 20px;
-background:#00ffcc;
-color:black;
-border:none;
-cursor:pointer;
-border-radius:6px;
-width:220px;
-font-weight:bold;
-}
-
-.option:hover{background:#009988;}
-
-.correct{background:#4CAF50 !important;}
-.incorrect{background:#ff4444 !important;}
-
-.options{
-display:flex;
-flex-direction:column;
-gap:10px;
-}
-
-.timer-circle{
-width:100px;
-height:100px;
-border-radius:50%;
-border:10px solid #ff4444;
-display:flex;
-align-items:center;
-justify-content:center;
-font-size:1.6em;
-font-weight:bold;
-color:#ff4444;
-box-shadow:0 0 10px #ff4444;
-}
-
-input{
-font-size:1.4em;
-padding:10px;
-border-radius:5px;
-width:160px;
-text-align:center;
-}
-
-footer{margin-top:40px;}
 </style>
 </head>
-
 <body>
 
-<h1>Math Challenge</h1>
-
-<div class="container" id="mode-screen">
-<h2>Select Answer Mode</h2>
-<button class="option" onclick="setAnswerMode('mcq')">MCQ Mode</button>
-<button class="option" onclick="setAnswerMode('typing')">Typing Mode</button>
+<!-- ══════ MODE SCREEN ══════ -->
+<div class="screen active" id="mode-screen">
+  <div class="brand">BANK<span>PREP</span></div>
+  <div class="brand-sub">Math Challenge · Quantitative Aptitude</div>
+  <div style="height:26px"></div>
+  <div class="card">
+    <div class="section-label">Practice Mode</div>
+    <div class="mode-pills">
+      <button class="pill normal active" id="pill-normal" onclick="selectPracticeMode('normal')">⏱ Normal</button>
+      <button class="pill speed"  id="pill-speed"  onclick="selectPracticeMode('speed')">⚡ Speed</button>
+      <button class="pill accuracy" id="pill-accuracy" onclick="selectPracticeMode('accuracy')">🎯 Accuracy</button>
+    </div>
+    <div id="mode-desc" style="font-size:.82rem;color:var(--muted);margin-bottom:18px;min-height:36px;line-height:1.5;padding:0 2px;"></div>
+    <div class="divider"></div>
+    <div class="section-label">Answer Style</div>
+    <div class="grid2" style="margin-bottom:18px;">
+      <button class="ans-style-btn active" id="ans-mcq"    onclick="selectAnswerMode('mcq')">⊙ MCQ</button>
+      <button class="ans-style-btn"        id="ans-typing" onclick="selectAnswerMode('typing')">⌨ Typing</button>
+    </div>
+    <div class="section-label">Question Count</div>
+    <div class="count-pills">
+      <div class="count-pill active" onclick="selectCount(10,this)">10</div>
+      <div class="count-pill"        onclick="selectCount(25,this)">25</div>
+      <div class="count-pill"        onclick="selectCount(50,this)">50</div>
+    </div>
+  </div>
+  <div style="height:14px"></div>
+  <button class="btn primary" style="max-width:580px" onclick="goToTypeScreen()">Next →</button>
 </div>
 
-<div class="container" id="type-selection-screen" style="display:none">
-
-<h2>Select Question Type</h2>
-
-<button class="option" onclick="startGame(['+'])">Addition</button>
-<button class="option" onclick="startGame(['-'])">Subtraction</button>
-<button class="option" onclick="startGame(['*'])">Multiplication 2×2</button>
-<button class="option" onclick="startGame(['*3x2'])">Multiplication 3×2</button>
-<button class="option" onclick="startGame(['square'])">Squares</button>
-<button class="option" onclick="startGame(['percent'])">Percentage</button>
-<button class="option" onclick="startGame(['division'])">Division</button>
-
-<button class="option"
-onclick="startGame(['+','-','*','*3x2','square','percent','division'])">
-All Mixed
-</button>
-
+<!-- ══════ TYPE SCREEN ══════ -->
+<div class="screen" id="type-screen">
+  <div class="brand">BANK<span>PREP</span></div>
+  <div class="brand-sub" id="type-sub">Select Question Type</div>
+  <div style="height:18px"></div>
+  <div class="card" style="max-width:620px">
+    <div class="section-label">Individual Topics</div>
+    <div class="grid2">
+      <button class="btn type-btn" onclick="startGame(['+'])">       <span class="icon">➕</span><span class="label">Addition</span>       <span class="desc">2-digit numbers</span></button>
+      <button class="btn type-btn" onclick="startGame(['-'])">       <span class="icon">➖</span><span class="label">Subtraction</span>    <span class="desc">2-digit numbers</span></button>
+      <button class="btn type-btn" onclick="startGame(['*'])">       <span class="icon">✖</span> <span class="label">Multiply 2×2</span>  <span class="desc">11–30 range</span></button>
+      <button class="btn type-btn" onclick="startGame(['*3x2'])">    <span class="icon">✖</span> <span class="label">Multiply 3×2</span>  <span class="desc">101–299 × 11–29</span></button>
+      <button class="btn type-btn" onclick="startGame(['square'])">  <span class="icon">x²</span><span class="label">Squares</span>        <span class="desc">1–200</span></button>
+      <button class="btn type-btn" onclick="startGame(['cube'])">    <span class="icon">x³</span><span class="label">Cubes</span>          <span class="desc">2–30</span></button>
+      <button class="btn type-btn" onclick="startGame(['sq-cu'])">   <span class="icon">²³</span><span class="label">Sq &amp; Cube Mix</span><span class="desc">Sq 2–50 · Cu 2–30</span></button>
+      <button class="btn type-btn" onclick="startGame(['percent'])"> <span class="icon">%</span> <span class="label">Percentage</span>     <span class="desc">Fraction equivalents</span></button>
+      <button class="btn type-btn" onclick="startGame(['division'])" style="grid-column:1/-1"><span class="icon">÷</span><span class="label">Division</span><span class="desc">Clean divisibility</span></button>
+    </div>
+    <div class="divider"></div>
+    <div class="section-label">Combined</div>
+    <div class="col">
+      <button class="btn primary" onclick="startGame(['+','-','*','*3x2','square','cube','sq-cu','percent','division'])">⚡ All Mixed — Full Aptitude Test</button>
+      <button class="btn" id="weak-zone-btn" onclick="startWeakZone()" style="display:none;border-color:rgba(231,76,110,0.4);color:var(--red);">🎯 Weak Zone Mode <span id="wz-hint" style="font-size:.75rem;color:var(--muted)"></span></button>
+    </div>
+  </div>
+  <div style="height:14px"></div>
+  <button class="btn" style="max-width:200px" onclick="show('mode-screen')">← Back</button>
 </div>
 
-<div class="container" id="game-screen" style="display:none">
+<!-- ══════ GAME SCREEN ══════ -->
+<div class="screen" id="game-screen">
+  <div class="hud" id="main-hud">
+    <div class="hud-stat">
+      <div class="val green" id="hud-score">0</div>
+      <div class="lbl">Score</div>
+    </div>
+    <div class="hud-stat">
+      <div class="val amber" id="hud-streak">0</div>
+      <div class="lbl">Streak</div>
+    </div>
+    <div class="timer-wrap" id="timer-wrap">
+      <svg class="timer-svg" viewBox="0 0 72 72">
+        <circle class="timer-bg" cx="36" cy="36" r="32"/>
+        <circle class="timer-fg" id="timer-arc" cx="36" cy="36" r="32"/>
+      </svg>
+      <div class="timer-num" id="timer-num">30</div>
+      <div class="timer-inf" id="timer-inf" style="display:none">∞</div>
+    </div>
+    <div class="hud-stat">
+      <div class="val" id="hud-q">1<span style="font-size:.85rem;color:var(--muted)">/25</span></div>
+      <div class="lbl">Question</div>
+    </div>
+    <div class="hud-stat">
+      <div class="val red" id="hud-wrong">0</div>
+      <div class="lbl">Wrong</div>
+    </div>
+  </div>
 
-<div class="problem" id="problem"></div>
+  <div class="progress-wrap" style="width:100%;max-width:620px">
+    <div class="progress-bar" id="progress-bar" style="width:0%"></div>
+  </div>
 
-<div class="options" id="options"></div>
+  <div class="q-card">
+    <div class="q-meta" id="q-meta">—</div>
+    <div class="q-problem" id="problem">—</div>
+    <button class="bookmark-btn" id="bookmark-btn" onclick="toggleBookmark()" title="Flag for later review">🔖</button>
+  </div>
 
-<div class="timer-circle" id="timer-circle">30</div>
-
-<div id="score">Score: 0</div>
-<div id="streak">Streak: 0</div>
-
+  <div class="options-grid" id="options"></div>
 </div>
 
-<footer>Prepared by Yash Kalra</footer>
+<!-- ══════ DRILL SCREEN ══════ -->
+<div class="screen" id="drill-screen">
+  <div class="brand" style="font-size:2rem">BANK<span>PREP</span></div>
+  <div class="brand-sub">Bookmarked Review Drill</div>
+  <div style="height:16px"></div>
+  <div class="drill-counter" id="drill-counter">Question 1 of 1</div>
+  <div class="q-card" style="max-width:620px;width:100%">
+    <div class="q-meta" id="drill-meta">—</div>
+    <div class="q-problem" id="drill-problem">—</div>
+  </div>
+  <div class="options-grid" id="drill-options" style="width:100%;max-width:620px"></div>
+  <div style="height:12px"></div>
+  <button class="btn" style="max-width:200px" onclick="skipDrill()">Skip →</button>
+</div>
+
+<!-- ══════ RESULT SCREEN ══════ -->
+<div class="screen" id="result-screen">
+  <div class="brand" style="font-size:2rem">BANK<span>PREP</span></div>
+  <div style="height:16px"></div>
+  <div class="result-card">
+    <div class="section-label">Test Complete</div>
+    <div class="result-score" id="r-score">0</div>
+    <div class="result-label">out of <span id="r-total">25</span> correct</div>
+    <div id="grade-wrap"></div>
+    <div class="stats-row">
+      <div class="stat-box"><div class="val" id="r-accuracy">—</div><div class="lbl">Accuracy</div></div>
+      <div class="stat-box"><div class="val" id="r-time">—</div><div class="lbl">Avg Time</div></div>
+      <div class="stat-box"><div class="val" id="r-streak">—</div><div class="lbl">Best Streak</div></div>
+    </div>
+
+    <!-- bookmark drill CTA -->
+    <div id="bm-cta" style="display:none;margin-bottom:14px;">
+      <button class="btn" onclick="startDrill()" style="border-color:rgba(240,180,41,0.4);color:var(--accent);">
+        🔖 Drill My Bookmarked Questions (<span id="bm-count">0</span>)
+      </button>
+    </div>
+
+    <!-- wrong log -->
+    <div class="log-section" id="wrong-log-sec" style="display:none">
+      <div class="log-header">
+        <span>Wrong Answers</span>
+        <button class="toggle-btn" id="log-toggle" onclick="toggleSection('wrong-log-body','log-toggle')">Hide ▲</button>
+      </div>
+      <div class="log-scroll" id="wrong-log-body"></div>
+    </div>
+
+    <!-- weak zone bars -->
+    <div class="log-section" id="weak-sec" style="display:none">
+      <div class="log-header">
+        <span>Topic Accuracy</span>
+        <button class="toggle-btn" id="weak-toggle" onclick="toggleSection('weak-body','weak-toggle')">Hide ▲</button>
+      </div>
+      <div class="weak-bars" id="weak-body"></div>
+    </div>
+
+    <div style="height:18px"></div>
+    <div class="col">
+      <button class="btn primary" onclick="restartSame()">↺ Retry Same Topic</button>
+      <button class="btn" onclick="show('type-screen')">Change Topic</button>
+      <button class="btn" onclick="show('mode-screen')">Change Mode</button>
+    </div>
+  </div>
+  <div style="height:60px"></div>
+</div>
+
+<div class="feedback" id="feedback"></div>
+<footer>Prepared by Yash Kalra &nbsp;·&nbsp; BankPrep Math Challenge</footer>
 
 <script>
+// ─── CONFIG ──────────────────────────────────────────────────────
+const TIMER_NORMAL = 30;
+const TIMER_SPEED  = 15;
+const ARC_CIRC     = 201; // 2π×32
 
-let timer
-let timeLeft=30
+const typeLabels = {
+  '+':'Addition', '-':'Subtraction', '*':'Multiply 2×2', '*3x2':'Multiply 3×2',
+  'square':'Squares', 'square-small':'Squares', 'cube':'Cubes', 'sq-cu':'Sq & Cubes',
+  'percent':'Percentage', 'division':'Division'
+};
 
-let score=0
-let streak=0
-let questionCount=0
+const modeDesc = {
+  normal:   '30-second timer per question. Choose MCQ or Typing mode.',
+  speed:    '⚡ 15-second timer, typing only. No options shown — build raw speed.',
+  accuracy: '🎯 No timer at all. Focus entirely on accuracy.'
+};
 
-let totalQuestions=25
+// ─── STATE ───────────────────────────────────────────────────────
+let practiceMode = 'normal';
+let answerMode   = 'mcq';
+let selectedTypes = [];
+let totalQuestions = 10;
 
-let currentAnswer
-let selectedTypes
-let answerMode="mcq"
+let timer, timeLeft = 30;
+let score=0, wrong=0, streak=0, bestStreak=0, questionCount=0, totalTime=0;
+let currentAnswer, currentProbHTML, currentMeta, currentType;
 
-let totalTime=0
+let wrongLog     = [];  // {html, answer, meta, bookmarked}
+let bookmarkedQ  = [];  // flagged mid-game {html, answer, meta}
+let isFlagged    = false;
 
+let typeStats    = {};  // {type: {correct, total}}
+let weakHistory  = {};  // persisted across sessions
 
-function setAnswerMode(mode){
+// ─── INIT ────────────────────────────────────────────────────────
+window.onload = () => {
+  selectPracticeMode('normal');
+  selectAnswerMode('mcq');
+  try { const w = localStorage.getItem('bp_weak'); if(w) weakHistory = JSON.parse(w); } catch(e){}
+  refreshWeakBtn();
+};
 
-answerMode=mode
-
-document.getElementById("mode-screen").style.display="none"
-document.getElementById("type-selection-screen").style.display="flex"
-
+function saveWeak() {
+  try { localStorage.setItem('bp_weak', JSON.stringify(weakHistory)); } catch(e){}
 }
 
-
-function startGame(types){
-
-selectedTypes=types
-
-document.getElementById("type-selection-screen").style.display="none"
-document.getElementById("game-screen").style.display="flex"
-
-score=0
-streak=0
-questionCount=0
-totalTime=0
-
-generateProblem()
-
+function refreshWeakBtn() {
+  const btn = document.getElementById('weak-zone-btn');
+  const keys = Object.keys(weakHistory).filter(k => weakHistory[k].total > 0);
+  if (keys.length > 0) {
+    btn.style.display = 'block';
+    // show the worst type as a hint
+    const worst = keys.sort((a,b) =>
+      (weakHistory[a].correct/weakHistory[a].total) - (weakHistory[b].correct/weakHistory[b].total)
+    )[0];
+    const pct = ((weakHistory[worst].correct/weakHistory[worst].total)*100).toFixed(0);
+    document.getElementById('wz-hint').textContent = '— focus: ' + (typeLabels[worst]||worst) + ' ('+pct+'%)';
+  } else {
+    btn.style.display = 'none';
+  }
 }
 
-
-function generateProblem(){
-
-if(questionCount>=totalQuestions){
-showResult()
-return
+// ─── SETUP SCREENS ───────────────────────────────────────────────
+function selectPracticeMode(m) {
+  practiceMode = m;
+  ['normal','speed','accuracy'].forEach(x =>
+    document.getElementById('pill-'+x).classList.toggle('active', x===m));
+  document.getElementById('mode-desc').textContent = modeDesc[m];
+  const mcqBtn = document.getElementById('ans-mcq');
+  if (m === 'speed') {
+    selectAnswerMode('typing');
+    mcqBtn.disabled = true;
+  } else {
+    mcqBtn.disabled = false;
+  }
 }
 
-questionCount++
-
-let type=selectedTypes[Math.floor(Math.random()*selectedTypes.length)]
-
-let a,b
-
-
-if(type==="+"){
-
-a=rand(10,99)
-b=rand(10,99)
-
-currentAnswer=a+b
-
-document.getElementById("problem").textContent=a+" + "+b
-
+function selectAnswerMode(m) {
+  if (practiceMode==='speed' && m==='mcq') return;
+  answerMode = m;
+  document.getElementById('ans-mcq').classList.toggle('active', m==='mcq');
+  document.getElementById('ans-typing').classList.toggle('active', m==='typing');
 }
 
-
-else if(type==="-" ){
-
-a=rand(10,99)
-b=rand(10,a)
-
-currentAnswer=a-b
-
-document.getElementById("problem").textContent=a+" - "+b
-
+function selectCount(n, el) {
+  totalQuestions = n;
+  document.querySelectorAll('.count-pill').forEach(p => p.classList.remove('active'));
+  el.classList.add('active');
 }
 
-
-else if(type==="*"){
-
-a=rand(11,30)
-b=rand(11,30)
-
-currentAnswer=a*b
-
-document.getElementById("problem").textContent=a+" × "+b
-
+function goToTypeScreen() {
+  const lbl = {normal:'Normal Mode', speed:'⚡ Speed Drill', accuracy:'🎯 Accuracy Mode'};
+  document.getElementById('type-sub').textContent = lbl[practiceMode];
+  show('type-screen');
 }
 
+// ─── GAME INIT ───────────────────────────────────────────────────
+function startGame(types) {
+  selectedTypes = types;
+  score=0; wrong=0; streak=0; bestStreak=0; questionCount=0; totalTime=0;
+  wrongLog=[]; bookmarkedQ=[]; typeStats={}; isFlagged=false;
+  show('game-screen');
 
-else if(type==="*3x2"){
+  // inject mode badge into HUD
+  const hud = document.getElementById('main-hud');
+  const old = hud.querySelector('.mode-badge');
+  if (old) old.remove();
+  const badge = document.createElement('div');
+  badge.className = 'mode-badge '+practiceMode;
+  badge.textContent = {normal:'NORMAL', speed:'SPEED', accuracy:'∞ TIME'}[practiceMode];
+  hud.insertBefore(badge, hud.firstChild);
 
-a=rand(101,299)
-b=rand(11,29)
+  // timer visibility
+  const isAcc = practiceMode==='accuracy';
+  document.getElementById('timer-arc').style.display = isAcc ? 'none' : '';
+  document.getElementById('timer-num').style.display = isAcc ? 'none' : 'flex';
+  document.getElementById('timer-inf').style.display = isAcc ? 'flex' : 'none';
+  document.getElementById('timer-wrap').classList.toggle('speed-ring', practiceMode==='speed');
 
-currentAnswer=a*b
-
-document.getElementById("problem").textContent=a+" × "+b
-
+  generateProblem();
 }
 
+function restartSame() { startGame(selectedTypes); }
 
-else if(type==="square"){
-
-a=rand(1,200)
-
-currentAnswer=a*a
-
-document.getElementById("problem").textContent=a+"²"
-
+// ─── WEAK ZONE MODE ──────────────────────────────────────────────
+function startWeakZone() {
+  const entries = Object.entries(weakHistory).filter(([,v])=>v.total>0);
+  if (!entries.length) return;
+  const sorted = entries.sort((a,b)=>
+    (a[1].correct/a[1].total) - (b[1].correct/b[1].total));
+  const worst = sorted.slice(0,3).map(e=>e[0]);
+  startGame(worst);
 }
 
+// ─── PROBLEM GENERATION ──────────────────────────────────────────
+function rand(min,max){ return Math.floor(Math.random()*(max-min+1))+min; }
 
-else if(type==="percent"){
+function generateProblem() {
+  if (questionCount >= totalQuestions) { showResult(); return; }
+  questionCount++;
 
-let fractions=[
+  document.getElementById('hud-q').innerHTML =
+    questionCount+'<span style="font-size:.85rem;color:var(--muted)">/'+ totalQuestions +'</span>';
+  document.getElementById('progress-bar').style.width =
+    ((questionCount-1)/totalQuestions*100)+'%';
 
-{p:"50",n:1,d:2},
+  // reset bookmark
+  isFlagged = false;
+  const bmb = document.getElementById('bookmark-btn');
+  bmb.className = 'bookmark-btn';
+  bmb.textContent = '🔖';
 
-{p:"33.33",n:1,d:3},
-{p:"66.67",n:2,d:3},
+  let type = selectedTypes[Math.floor(Math.random()*selectedTypes.length)];
+  let a, b;
 
-{p:"25",n:1,d:4},
-{p:"75",n:3,d:4},
+  if (type==='sq-cu') {
+    type = Math.random()<0.5 ? 'square-small' : 'cube';
+  }
+  currentType = type;
+  const label = typeLabels[type] || type;
+  document.getElementById('q-meta').textContent = label;
+  currentMeta = label;
 
-{p:"20",n:1,d:5},
-{p:"40",n:2,d:5},
-{p:"60",n:3,d:5},
-{p:"80",n:4,d:5},
+  if (type==='+')             { a=rand(10,99);   b=rand(10,99);  currentAnswer=a+b;   setQ(a+' + '+b); }
+  else if (type==='-')        { a=rand(10,99);   b=rand(10,a);   currentAnswer=a-b;   setQ(a+' − '+b); }
+  else if (type==='*')        { a=rand(11,30);   b=rand(11,30);  currentAnswer=a*b;   setQ(a+' × '+b); }
+  else if (type==='*3x2')     { a=rand(101,299); b=rand(11,29);  currentAnswer=a*b;   setQ(a+' × '+b); }
+  else if (type==='square')   { a=rand(1,200);   currentAnswer=a*a;   setSup(a,2); }
+  else if (type==='square-small'){ a=rand(2,50); currentAnswer=a*a;   setSup(a,2); }
+  else if (type==='cube')     { a=rand(2,30);    currentAnswer=a*a*a; setSup(a,3); }
+  else if (type==='percent')  {
+    const F=[
+      {p:"50",n:1,d:2},{p:"33.33",n:1,d:3},{p:"66.67",n:2,d:3},
+      {p:"25",n:1,d:4},{p:"75",n:3,d:4},
+      {p:"20",n:1,d:5},{p:"40",n:2,d:5},{p:"60",n:3,d:5},{p:"80",n:4,d:5},
+      {p:"16.67",n:1,d:6},{p:"83.33",n:5,d:6},
+      {p:"14.28",n:1,d:7},{p:"28.57",n:2,d:7},{p:"42.85",n:3,d:7},
+      {p:"57.14",n:4,d:7},{p:"71.42",n:5,d:7},{p:"85.71",n:6,d:7},
+      {p:"12.5",n:1,d:8},{p:"37.5",n:3,d:8},{p:"62.5",n:5,d:8},{p:"87.5",n:7,d:8},
+      {p:"11.11",n:1,d:9},{p:"22.22",n:2,d:9},{p:"44.44",n:4,d:9},
+      {p:"55.55",n:5,d:9},{p:"77.77",n:7,d:9},{p:"88.88",n:8,d:9},
+      {p:"9.09",n:1,d:11},{p:"18.18",n:2,d:11},{p:"27.27",n:3,d:11},
+      {p:"36.36",n:4,d:11},{p:"45.45",n:5,d:11},{p:"54.54",n:6,d:11},
+      {p:"63.63",n:7,d:11},{p:"72.72",n:8,d:11},{p:"81.81",n:9,d:11}
+    ];
+    const f=F[rand(0,F.length-1)];
+    b=f.d*rand(10,80); currentAnswer=(f.n*b)/f.d;
+    setQ(f.p+'% of '+b);
+  }
+  else if (type==='division') { b=rand(2,20); currentAnswer=rand(5,40); a=currentAnswer*b; setQ(a+' ÷ '+b); }
 
-{p:"16.67",n:1,d:6},
-{p:"83.33",n:5,d:6},
+  currentProbHTML = document.getElementById('problem').innerHTML;
+  if (!typeStats[type]) typeStats[type]={correct:0,total:0};
 
-{p:"14.28",n:1,d:7},
-{p:"28.57",n:2,d:7},
-{p:"42.85",n:3,d:7},
-{p:"57.14",n:4,d:7},
-{p:"71.42",n:5,d:7},
-{p:"85.71",n:6,d:7},
-
-{p:"12.5",n:1,d:8},
-{p:"37.5",n:3,d:8},
-{p:"62.5",n:5,d:8},
-{p:"87.5",n:7,d:8},
-
-{p:"11.11",n:1,d:9},
-{p:"22.22",n:2,d:9},
-{p:"33.33",n:3,d:9},
-{p:"44.44",n:4,d:9},
-{p:"55.55",n:5,d:9},
-{p:"66.66",n:6,d:9},
-{p:"77.77",n:7,d:9},
-{p:"88.88",n:8,d:9},
-
-{p:"9.09",n:1,d:11},
-{p:"18.18",n:2,d:11},
-{p:"27.27",n:3,d:11},
-{p:"36.36",n:4,d:11},
-{p:"45.45",n:5,d:11},
-{p:"54.54",n:6,d:11},
-{p:"63.63",n:7,d:11},
-{p:"72.72",n:8,d:11},
-{p:"81.81",n:9,d:11}
-
-]
-
-let f=fractions[rand(0,fractions.length-1)]
-
-b=f.d*rand(10,80)
-
-currentAnswer=(f.n*b)/f.d
-
-document.getElementById("problem").textContent=f.p+"% of "+b
-
+  generateOptions();
+  startTimer();
 }
 
+function setQ(txt)       { document.getElementById('problem').textContent=txt; }
+function setSup(base,exp){ document.getElementById('problem').innerHTML=base+'<sup style="font-size:1.6rem">'+exp+'</sup>'; }
 
-else if(type==="division"){
-
-b=rand(2,20)
-
-currentAnswer=rand(5,40)
-
-a=currentAnswer*b
-
-document.getElementById("problem").textContent=a+" ÷ "+b
-
+// ─── BOOKMARK ────────────────────────────────────────────────────
+function toggleBookmark() {
+  isFlagged = !isFlagged;
+  const b = document.getElementById('bookmark-btn');
+  b.classList.toggle('flagged', isFlagged);
+  b.textContent = isFlagged ? '★' : '🔖';
 }
 
-generateOptions()
+// ─── OPTIONS ─────────────────────────────────────────────────────
+function generateOptions() {
+  const c = document.getElementById('options');
+  c.innerHTML = '';
+  const useMCQ = (practiceMode !== 'speed') && (answerMode === 'mcq');
 
-startTimer()
-
+  if (useMCQ) {
+    c.style.gridTemplateColumns = '1fr 1fr';
+    const used = new Set([currentAnswer]);
+    const vals = [currentAnswer];
+    let tries = 0;
+    while (vals.length < 4 && tries < 300) {
+      tries++;
+      const spread = currentAnswer > 1000 ? rand(50,500) : currentAnswer > 100 ? rand(5,80) : rand(1,50);
+      const v = currentAnswer + spread * (Math.random()<0.5?1:-1);
+      if (!used.has(v) && v > 0) { used.add(v); vals.push(v); }
+    }
+    shuffle(vals);
+    vals.forEach(v => {
+      const btn = document.createElement('button');
+      btn.className = 'opt-btn';
+      btn.textContent = v;
+      btn.onclick = () => checkAnswer(btn, v);
+      c.appendChild(btn);
+    });
+  } else {
+    c.style.gridTemplateColumns = '1fr';
+    const wrap = document.createElement('div');
+    wrap.className = 'typing-wrap';
+    const inp = document.createElement('input');
+    inp.type = 'number'; inp.placeholder = 'Your answer'; inp.id = 'type-inp';
+    const sub = document.createElement('button');
+    sub.className = 'btn primary'; sub.textContent = 'Submit →'; sub.style.width='100%';
+    const go = () => checkAnswer(inp, parseFloat(inp.value));
+    sub.onclick = go;
+    inp.addEventListener('keypress', e => { if(e.key==='Enter') go(); });
+    wrap.appendChild(inp); wrap.appendChild(sub); c.appendChild(wrap);
+    setTimeout(()=>inp.focus(), 80);
+  }
 }
 
-
-
-function generateOptions(){
-
-let container=document.getElementById("options")
-
-container.innerHTML=""
-
-if(answerMode==="mcq"){
-
-let correctIndex=rand(0,3)
-
-let used=new Set()
-
-for(let i=0;i<4;i++){
-
-let val
-
-if(i===correctIndex){
-
-val=currentAnswer
-
+function shuffle(arr) {
+  for(let i=arr.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [arr[i],arr[j]]=[arr[j],arr[i]];
+  }
 }
 
-else{
+// ─── CHECK ANSWER ────────────────────────────────────────────────
+function checkAnswer(source, val) {
+  clearInterval(timer);
+  const maxT = practiceMode==='accuracy' ? 0 : (practiceMode==='speed' ? TIMER_SPEED : TIMER_NORMAL);
+  const taken = practiceMode==='accuracy' ? 0 : Math.max(0, maxT - timeLeft);
+  totalTime += taken;
 
-do{
-val=currentAnswer+rand(-50,50)
-}while(used.has(val)||val===currentAnswer)
+  const correct = (Math.abs(val - currentAnswer) < 0.5);
 
+  typeStats[currentType].total++;
+  if (correct) {
+    typeStats[currentType].correct++;
+    score++; streak++;
+    if (streak > bestStreak) bestStreak = streak;
+    flashFeedback('✓', 'var(--green)');
+  } else {
+    wrong++; streak = 0;
+    flashFeedback('✗', 'var(--red)');
+    if (answerMode==='mcq' && practiceMode!=='speed') highlightCorrect();
+    wrongLog.push({ html: currentProbHTML, answer: currentAnswer, meta: currentMeta, bookmarked: isFlagged });
+  }
+
+  if (isFlagged) bookmarkedQ.push({ html: currentProbHTML, answer: currentAnswer, meta: currentMeta });
+
+  document.getElementById('hud-score').textContent  = score;
+  document.getElementById('hud-streak').textContent = streak;
+  document.getElementById('hud-wrong').textContent  = wrong;
+
+  if (source.tagName==='BUTTON') {
+    source.classList.add(correct?'correct':'incorrect');
+    source.disabled = true;
+    document.querySelectorAll('.opt-btn').forEach(b=>b.disabled=true);
+  }
+
+  setTimeout(generateProblem, 900);
 }
 
-used.add(val)
-
-let btn=document.createElement("button")
-
-btn.className="option"
-
-btn.textContent=val
-
-btn.onclick=()=>checkAnswer(btn,val)
-
-container.appendChild(btn)
-
+function highlightCorrect() {
+  document.querySelectorAll('.opt-btn').forEach(b => {
+    if (parseFloat(b.textContent)===currentAnswer) b.classList.add('correct');
+  });
 }
 
+// ─── TIMER ───────────────────────────────────────────────────────
+function startTimer() {
+  if (practiceMode==='accuracy') { timeLeft=99999; return; }
+  const max = practiceMode==='speed' ? TIMER_SPEED : TIMER_NORMAL;
+  timeLeft = max;
+  const arc = document.getElementById('timer-arc');
+  const num = document.getElementById('timer-num');
+  arc.style.stroke = 'var(--accent)';
+  arc.style.strokeDashoffset = 0;
+  num.textContent = max;
+
+  timer = setInterval(()=>{
+    timeLeft--;
+    num.textContent = timeLeft;
+    arc.style.strokeDashoffset = ((max-timeLeft)/max) * ARC_CIRC;
+    if (timeLeft <= Math.ceil(max*0.2))      arc.style.stroke = 'var(--red)';
+    else if (timeLeft <= Math.ceil(max*0.5)) arc.style.stroke = 'var(--accent2)';
+    if (timeLeft <= 0) { clearInterval(timer); checkAnswer(document.createElement('div'),NaN); }
+  }, 1000);
 }
 
-else{
-
-let input=document.createElement("input")
-
-input.type="number"
-
-input.placeholder="Type answer"
-
-let submit=document.createElement("button")
-
-submit.className="option"
-
-submit.textContent="Submit"
-
-submit.onclick=()=>checkAnswer(input,parseInt(input.value))
-
-input.addEventListener("keypress",function(e){
-if(e.key==="Enter"){
-checkAnswer(input,parseInt(input.value))
-}
-})
-
-container.appendChild(input)
-container.appendChild(submit)
-
-setTimeout(()=>input.focus(),50)
-
+// ─── FLASH ───────────────────────────────────────────────────────
+function flashFeedback(sym, col) {
+  const el = document.getElementById('feedback');
+  el.style.color=col; el.textContent=sym;
+  el.className='feedback'; void el.offsetWidth; el.className='feedback show';
 }
 
+// ─── RESULT ──────────────────────────────────────────────────────
+function showResult() {
+  clearInterval(timer);
+
+  // update persistent weak history
+  Object.entries(typeStats).forEach(([t,s])=>{
+    if(!weakHistory[t]) weakHistory[t]={correct:0,total:0};
+    weakHistory[t].correct += s.correct;
+    weakHistory[t].total   += s.total;
+  });
+  saveWeak();
+  refreshWeakBtn();
+
+  show('result-screen');
+
+  const acc = ((score/totalQuestions)*100).toFixed(1);
+  const avgT = totalQuestions>0 ? (totalTime/totalQuestions).toFixed(1) : '—';
+  document.getElementById('r-score').textContent    = score;
+  document.getElementById('r-total').textContent    = totalQuestions;
+  document.getElementById('r-accuracy').textContent = acc+'%';
+  document.getElementById('r-time').textContent     = practiceMode==='accuracy' ? '∞' : avgT+'s';
+  document.getElementById('r-streak').textContent   = bestStreak;
+  document.getElementById('progress-bar').style.width = '100%';
+
+  // grade
+  const pct=score/totalQuestions;
+  let g,c,msg;
+  if(pct>=0.92){g='S RANK';c='#f0b429';msg='Exceptional!';}
+  else if(pct>=0.80){g='A RANK';c='#2ecc87';msg='Excellent work!';}
+  else if(pct>=0.65){g='B RANK';c='#3a8ef6';msg='Good effort!';}
+  else if(pct>=0.50){g='C RANK';c='#e05c00';msg='Keep practicing!';}
+  else{g='D RANK';c='#e74c6e';msg='More practice needed';}
+  document.getElementById('grade-wrap').innerHTML=
+    `<div class="grade-badge" style="background:${c}22;color:${c};border:1px solid ${c}44">${g} — ${msg}</div>`;
+
+  // bookmarks CTA
+  const bmCta = document.getElementById('bm-cta');
+  if (bookmarkedQ.length>0) {
+    bmCta.style.display='block';
+    document.getElementById('bm-count').textContent = bookmarkedQ.length;
+  } else {
+    bmCta.style.display='none';
+  }
+
+  // wrong log
+  const wls = document.getElementById('wrong-log-sec');
+  if (wrongLog.length>0) {
+    wls.style.display='block';
+    const body = document.getElementById('wrong-log-body');
+    body.innerHTML='';
+    wrongLog.forEach(item=>{
+      const d=document.createElement('div');
+      d.className='wrong-item'+(item.bookmarked?' bm':'');
+      d.innerHTML=`
+        <div class="wi-left">
+          <div class="tag">${item.meta}${item.bookmarked?' · 🔖':''}</div>
+          <div class="q">${item.html}</div>
+        </div>
+        <div class="wi-ans">= ${item.answer}</div>`;
+      body.appendChild(d);
+    });
+  } else { wls.style.display='none'; }
+
+  // weak bars (only if multiple types)
+  const ws = document.getElementById('weak-sec');
+  const entries = Object.entries(typeStats).filter(([,v])=>v.total>0);
+  if (entries.length>1) {
+    ws.style.display='block';
+    const body=document.getElementById('weak-body');
+    body.innerHTML='';
+    entries.sort((a,b)=>(a[1].correct/a[1].total)-(b[1].correct/b[1].total))
+      .forEach(([t,s])=>{
+        const p=(s.correct/s.total)*100;
+        const col=p>=80?'var(--green)':p>=50?'var(--accent)':'var(--red)';
+        body.innerHTML+=`
+          <div class="weak-row">
+            <div class="weak-label">${typeLabels[t]||t}</div>
+            <div class="weak-track"><div class="weak-fill" style="width:${p}%;background:${col}"></div></div>
+            <div class="weak-pct" style="color:${col}">${p.toFixed(0)}%</div>
+          </div>`;
+      });
+  } else { ws.style.display='none'; }
 }
 
-
-
-function checkAnswer(source,val){
-
-clearInterval(timer)
-
-let timeTaken=30-timeLeft
-
-totalTime+=timeTaken
-
-if(val===currentAnswer){
-
-score++
-streak++
-
-if(source.tagName==="BUTTON") source.classList.add("correct")
-
+function toggleSection(bodyId, toggleId) {
+  const body = document.getElementById(bodyId);
+  const btn  = document.getElementById(toggleId);
+  const open = body.style.display !== 'none';
+  body.style.display = open ? 'none' : '';
+  btn.textContent = open ? 'Show ▼' : 'Hide ▲';
 }
 
-else{
+// ─── BOOKMARK DRILL ──────────────────────────────────────────────
+let drillIdx = 0;
+let drillAns = 0;
 
-streak=0
-
-if(source.tagName==="BUTTON") source.classList.add("incorrect")
-
-highlightCorrect()
-
+function startDrill() {
+  drillIdx = 0;
+  show('drill-screen');
+  loadDrillQ();
 }
 
-document.getElementById("score").textContent="Score: "+score
-document.getElementById("streak").textContent="Streak: "+streak
-
-setTimeout(generateProblem,1000)
-
+function loadDrillQ() {
+  if (drillIdx >= bookmarkedQ.length) { show('result-screen'); return; }
+  const item = bookmarkedQ[drillIdx];
+  document.getElementById('drill-counter').textContent =
+    'Question '+(drillIdx+1)+' of '+bookmarkedQ.length;
+  document.getElementById('drill-meta').textContent    = item.meta;
+  document.getElementById('drill-problem').innerHTML   = item.html;
+  drillAns = item.answer;
+  buildDrillInput();
 }
 
-
-
-function highlightCorrect(){
-
-document.querySelectorAll(".option").forEach(btn=>{
-if(parseInt(btn.textContent)===currentAnswer){
-btn.classList.add("correct")
-}
-})
-
-}
-
-
-
-function startTimer(){
-
-timeLeft=30
-
-let timerCircle=document.getElementById("timer-circle")
-
-timerCircle.textContent=timeLeft
-
-timer=setInterval(()=>{
-
-timeLeft--
-
-timerCircle.textContent=timeLeft
-
-timerCircle.style.transform=`scale(${timeLeft/30})`
-
-if(timeLeft<=0){
-
-clearInterval(timer)
-
-checkAnswer(document.createElement("div"),NaN)
-
+function buildDrillInput() {
+  const c = document.getElementById('drill-options');
+  c.innerHTML=''; c.style.gridTemplateColumns='1fr';
+  const wrap=document.createElement('div');
+  wrap.className='typing-wrap';
+  const inp=document.createElement('input');
+  inp.type='number'; inp.placeholder='Your answer';
+  const sub=document.createElement('button');
+  sub.className='btn primary'; sub.textContent='Check →'; sub.style.width='100%';
+  const go=()=>{
+    const v=parseFloat(inp.value);
+    const ok=Math.abs(v-drillAns)<0.5;
+    inp.style.borderColor=ok?'var(--green)':'var(--red)';
+    sub.textContent=ok?'✓ Correct! Next →':'✗ Answer: '+drillAns+' — Next →';
+    sub.disabled=true;
+    setTimeout(()=>{ drillIdx++; loadDrillQ(); },1300);
+  };
+  sub.onclick=go;
+  inp.addEventListener('keypress',e=>{ if(e.key==='Enter') go(); });
+  wrap.appendChild(inp); wrap.appendChild(sub); c.appendChild(wrap);
+  setTimeout(()=>inp.focus(),80);
 }
 
-},1000)
+function skipDrill() { drillIdx++; loadDrillQ(); }
 
+// ─── UTIL ────────────────────────────────────────────────────────
+function show(id) {
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0,0);
 }
-
-
-
-function showResult(){
-
-document.getElementById("game-screen").style.display="none"
-
-let accuracy=((score/totalQuestions)*100).toFixed(2)
-
-let avgTime=(totalTime/totalQuestions).toFixed(2)
-
-document.body.innerHTML=`
-
-<div class="container">
-
-<h2>Test Complete</h2>
-
-<p><strong>Score:</strong> ${score}/${totalQuestions}</p>
-
-<p><strong>Accuracy:</strong> ${accuracy}%</p>
-
-<p><strong>Average Time:</strong> ${avgTime} sec</p>
-
-<button class="option" onclick="location.reload()">Play Again</button>
-
-</div>
-
-<footer>Prepared by Yash Kalra</footer>
-
-`
-
-}
-
-
-
-function rand(min,max){
-
-return Math.floor(Math.random()*(max-min+1))+min
-
-}
-
 </script>
-
 </body>
 </html>
